@@ -1,0 +1,100 @@
+/*
+ * This file is part of Celestial (https://github.com/OpenFogStack/celestial).
+ * Copyright (c) 2024 Tobias Pfandzelter, The OpenFogStack Team.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ **/
+
+syntax = "proto3";
+
+package openfogstack.celestial.celestial;
+option go_package = "./;celestial";
+
+service Celestial {
+    rpc Register(RegisterRequest) returns (RegisterResponse);
+    rpc Init(InitRequest) returns (Empty);
+    rpc Update(stream StateUpdateRequest) returns (Empty);
+    rpc Stop(Empty) returns (Empty);
+}
+
+enum VMState {
+    VM_STATE_STOPPED = 0;
+    VM_STATE_ACTIVE = 1;
+}
+
+message MachineID {
+    uint32 group = 1;
+    uint32 id = 2;
+}
+
+message Empty {}
+
+message RegisterRequest {
+    uint32 host = 1;
+}
+
+message RegisterResponse {
+    uint32 available_cpus = 1;
+    uint64 available_ram = 2;
+    string peer_public_key = 3;
+    string peer_listen_addr = 4;
+}
+
+message InitRequest {
+    message Host {
+        uint32 id = 1;
+        string peer_public_key = 2;
+        string peer_listen_addr = 3;
+    }
+
+    repeated Host hosts = 1;
+    message Machine {
+        message MachineConfig {
+            // should also be 8 bit but protobuf doesn't support uint8...
+            uint32 vcpu_count = 1;
+            uint64 ram = 2;
+            uint64 disk_size = 3;
+            string root_image = 4;
+            string kernel = 5;
+            repeated string boot_parameters = 6;
+        }
+
+        MachineID id = 1;
+        optional string name = 2;
+        // should actually be 8 bit but protobuf doesn't support uint8...
+        uint32 host = 3;
+        MachineConfig config = 4;
+    }
+
+    repeated Machine machines = 2;
+}
+
+message StateUpdateRequest {
+    message MachineDiff {
+        VMState active = 1;
+        MachineID id = 2;
+    }
+    message NetworkDiff {
+        bool blocked = 1;
+        MachineID source = 2;
+        MachineID target = 3;
+        uint32 latency_us = 4;
+        uint64 bandwidth_kbps = 5;
+        // used for path reconstruction
+        MachineID next = 6;
+        MachineID prev = 7;
+    }
+
+    repeated MachineDiff machine_diffs = 1;
+    repeated NetworkDiff network_diffs = 2;
+}

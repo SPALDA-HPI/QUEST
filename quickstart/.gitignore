@@ -1,0 +1,6 @@
+*.zip
+*.img
+*.bin
+*.ext4
+results*.csv
+graphs/

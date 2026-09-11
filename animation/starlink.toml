@@ -1,0 +1,120 @@
+#
+# This file is part of Celestial (https://github.com/OpenFogStack/celestial).
+# Copyright (c) 2024 Tobias Pfandzelter, The OpenFogStack Team.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, version 3.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
+bbox = [-90.0, -180.0, 90.0, 180.0]
+resolution = 1
+duration = 86400
+
+[network_params]
+bandwidth_kbits = 10_000_000
+min_elevation = 40
+ground_station_connection_type = "all"
+
+[compute_params]
+vcpu_count = 1
+mem_size_mib = 512
+disk_size_mib = 10
+kernel = "x.bin"
+rootfs = "x.img"
+
+# https://en.wikipedia.org/wiki/Starlink
+# Last accessed: 2024-01-24
+
+# Group 1
+[[shell]]
+planes = 72
+sats = 22
+altitude_km = 550
+inclination = 53.0
+arc_of_ascending_nodes = 360.0
+eccentricity = 0.0
+
+# Group 2
+[[shell]]
+planes = 36
+sats = 20
+altitude_km = 570
+inclination = 70.0
+arc_of_ascending_nodes = 360.0
+eccentricity = 0.0
+
+# Group 3
+[[shell]]
+planes = 6
+sats = 58
+altitude_km = 560
+inclination = 97.6
+arc_of_ascending_nodes = 360.0
+eccentricity = 0.0
+
+# Group 4
+[[shell]]
+planes = 72
+sats = 22
+altitude_km = 540
+inclination = 53.2
+arc_of_ascending_nodes = 360.0
+eccentricity = 0.0
+
+# Group 4
+[[shell]]
+planes = 4
+sats = 43
+altitude_km = 560
+inclination = 97.6
+arc_of_ascending_nodes = 360.0
+eccentricity = 0.0
+
+# Group 5 (v2)
+[[shell]]
+planes = 28
+sats = 120
+altitude_km = 530
+inclination = 43.0
+arc_of_ascending_nodes = 360.0
+eccentricity = 0.0
+
+# Group 6 (v2)
+[[shell]]
+planes = 28
+sats = 120
+altitude_km = 559
+inclination = 43.0
+arc_of_ascending_nodes = 360.0
+eccentricity = 0.0
+
+# Group 7 (v2)
+[[shell]]
+planes = 28
+sats = 120
+altitude_km = 525
+inclination = 53.0
+arc_of_ascending_nodes = 360.0
+eccentricity = 0.0
+
+[[shell]]
+planes = 28
+sats = 120
+altitude_km = 535
+inclination = 33.0
+arc_of_ascending_nodes = 360.0
+eccentricity = 0.0
+
+[[ground_station]]
+name = "TUBerlin"
+lat = 52.51499
+long = 13.32674
