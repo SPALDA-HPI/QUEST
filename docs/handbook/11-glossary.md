@@ -18,8 +18,6 @@ configured by bandwidth and path stretch.
 **Bounding box.** Four coordinates delimiting a rectangular geographic region;
 in `bbox` activation mode it selects active satellite subpoints.
 
-**Celestial.** The upstream LEO edge emulator on which QUEST is based.
-
 **Constellation.** All configured satellite shells and ground stations.
 
 **Contact.** A currently visible and, when antennas are limited, selected
@@ -100,9 +98,6 @@ on Linux, macOS, and WSL2.
 **Precision Time Protocol (PTP).** A clock-synchronization mechanism that can
 expose host time to a KVM guest through `/dev/ptp0`.
 
-**QUEST.** Querying and Understanding Earth across Space and Time, this
-student-facing LEO spatial-processing platform.
-
 **Root filesystem.** The read-only guest `.img` containing Linux, dependencies,
 and `/app.sh`.
 
@@ -131,7 +126,7 @@ machine descriptions, and time-indexed machine/link differences.
 **Topology generation.** The offline orbit/contact/path calculation performed
 by `satgen.py`.
 
-**Worker.** The privileged Linux/amd64 `celestial.bin` process controlling
+**Worker.** The privileged Linux/amd64 `celestial.bin` runs on remote machine(host) process controlling
 Firecracker and host networking.
 
 **WSL2.** Windows Subsystem for Linux 2, the supported way to follow the common
