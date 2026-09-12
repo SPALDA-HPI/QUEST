@@ -7,17 +7,18 @@ correct command in the wrong one will induce errors.
 
 Your local Linux, macOS, or Windows Subsystem for Linux 2 (WSL2) shell holds a
 checkout, editor, Python environment, and Docker installation. It builds
-Linux/amd64 guest root filesystems and the guest kernel. It can also generate
-topologies and run unit tests, but it does not run the privileged worker on
-macOS or Windows.
+the Linux/amd64 `celestial.bin` worker and guest root filesystems, downloads
+the supplied Linux 5.12 guest kernel, generates topology archives, and runs
+unit tests.
 
-<ins>Docker is appropriate here</ins> because these container networks are separate from
-the clean Celestial runtime host.
+<ins>Docker is appropriate here</ins> because these container networks are
+separate from the clean Celestial runtime host.
 
 ## Remote VM
 
-The remote VM should run in a Linux/amd64 environment. It builds `celestial.bin` with Go, generates the quickstart topology
-with Python, and runs the worker and coordinator in separate terminals.
+The remote VM should run in a Linux/amd64 environment. It receives the worker,
+guest kernel, and root filesystem images built or downloaded locally, then
+runs the worker and the Python coordinator in separate terminals.
 
 Always use the assigned name through a variable:
 
@@ -26,15 +27,12 @@ REMOTE_HOST="<your assigned host>"
 ssh "$REMOTE_HOST"
 ```
 
-The HPI Scientific Compute Helpdesk supplies remote access, sudo policy, and a
-working KVM configuration. Students maintain the repository-level Go, Python,
-and virtual-environment setup. Do not install or run Docker remotely; its host
+Do not install or run Docker remotely; its host
 bridges and firewall state can conflict with Celestial networking.
 
 The worker changes host networking and starts Firecracker with elevated
 privileges. Coordinate one experiment at a time because the worker's host
-networking, port, and `/celestial` state are shared. Do not run it on a personal
-or unrelated server.
+networking, port, and `/celestial` state are shared.
 
 ## Guest microVM
 
@@ -96,49 +94,48 @@ SciPy for `celestial/fw_test.py`, Requests for inspecting validator scripts,
 and type stubs matching pandas 2.1 and protobuf 4.24. It does not replace the packages
 installed inside guest images. Keep `mypy==1.9.0` as pinned in the core list.
 
-In VS Code, open the QUEST directory and run **Python: Select Interpreter**
-from the Command Palette. Choose `.venv/bin/python` (Python 3.11). If you
-recreated an environment, run **Developer: Reload Window** to refresh the
-language server. Activating a terminal does not necessarily change the
-interpreter used by the editor. Verify it with:
-
-```sh
-python3 -c 'import sys; print(sys.version); print(sys.executable)'
-python3 -m pip check
-```
-
-`pyrightconfig.json` configures Pylance/Pyright basic checking for Python 3.11
-and the local `.venv`. Its extra import path mirrors the existing runtime
-path setup in `proto/celestial/__init__.py`. Diagnostics inside the four
-generated protobuf/gRPC binding files are ignored because their pinned
-generators emit constructs incompatible with newer Pyright checks; their
-types remain available to callers. Handwritten source and tests remain
-checked. Do not edit generated files to remove editor warnings.
-
 ## Go toolchain
 
-`go.mod` declares the module and `toolchain go1.22.1`. Confirm the effective
-tool before building:
+`go.mod` declares the module and `toolchain go1.22.1`. The normal workflow
+uses the pinned Go toolchain inside `compile.Dockerfile`. From the local
+repository root, build the Linux/amd64 worker with:
 
 ```sh
-go version
-make celestial.bin
+./celestial-make celestial.bin
+test -x celestial.bin
 ```
 
-The worker has Linux-specific source and requires amd64. Build it natively on
-the remote VM, or use the local compile container for code checks.
+The wrapper first builds the `celestial-make` image, mounts the checkout at
+`/celestial`, and runs the named Make target in a Linux/amd64 container. A
+local Go installation is useful for source navigation and focused development,
+but it is not required for this container build.
 
 ## Docker and generated artifacts
 
-Local Docker builds three kinds of artifacts:
+Local Docker builds three kinds of artifacts or tools:
 
-- `celestial-make`: compile and protobuf toolchain;
+- `celestial-make`: pinned toolchain that produces `celestial.bin`;
 - `rootfsbuilder`: guest filesystem builder;
-- `kernelbuilder`: guest kernel builder.
+- `satgen-docker`: optional isolated topology generator.
 
-Images, kernels, binaries, and topology ZIPs are reproducible outputs and are
-ignored. Source code, Dockerfiles, shell scripts, kernel configs, and TOML are
-tracked inputs.
+Generate topology archives from the local Python environment:
+
+```sh
+. .venv/bin/activate
+python3 satgen.py INPUT.toml OUTPUT.zip
+```
+
+The original Celestial setup also provides a Docker alternative. It produces
+the same kind of archive and is useful when you want dependency isolation:
+
+```sh
+make satgen-docker
+docker run --rm \
+    -v "$(pwd)":/app \
+    satgen-docker \
+    /app/INPUT.toml \
+    /app/OUTPUT.zip
+```
 
 ## Preflight and privilege boundary
 
@@ -147,9 +144,6 @@ the first experiment. It reads the operating system, architecture, command
 availability, Docker presence, KVM device access, and default interface. It
 does not install, delete, or reconfigure anything.
 
-Treat an error as evidence, not an invitation to guess. Students can repair
-their own repository environment; host KVM, sudo, and network-policy problems
-go to the administrator with the exact output.
 
 Checkpoint: for each file below, name the environment that creates it:
 `quickstart/quickstart.zip`, `kernel/vmlinux-5.12.bin`,

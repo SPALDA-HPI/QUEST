@@ -10,30 +10,36 @@ Use the repository's pinned compile container on a local workstation with
 Docker:
 
 ```sh
-make celestial-make
-./celestial-make proto
 ./celestial-make celestial.bin
 ```
 
-`make celestial-make` builds `compile.Dockerfile`. The wrapper mounts the
-checkout at `/celestial` and runs `make` inside a Linux/amd64 container. Use
+The wrapper runs `make celestial-make`, which builds `compile.Dockerfile`, then
+mounts the checkout at `/celestial` and runs the requested Make target inside
+a Linux/amd64 container. The resulting `celestial.bin` is therefore suitable
+for the remote Linux/amd64 worker even when the local workstation is macOS or
+Windows Subsystem for Linux 2. Use `./celestial-make proto` only when the
+protocol definition changes, and use
 `./celestial-make ebpf` only when the eBPF C source changes.
 
 Generated protobuf files under `proto/celestial/` must come from
 `proto/celestial/celestial.proto`; do not edit them by hand.
 
-## Native remote worker build
+This is the build path used by the original Celestial Quick Start. It keeps
+Docker on the local build workstation and transfers only the resulting binary
+to the clean runtime host.
 
-Do not use Docker on the remote Celestial host. With Go available, build the
-worker natively from the repository root:
+## Native build for advanced development
+
+With a compatible Linux/amd64 Go toolchain, developers can build natively:
 
 ```sh
 go version
 make celestial.bin
 ```
 
-The Makefile sets `GOOS=linux` and `GOARCH=amd64`. The resulting
-`celestial.bin` is the host worker, not a guest workload.
+The Makefile sets `GOOS=linux` and `GOARCH=amd64`. This is not the beginner
+quickstart path and is not a reason to install Docker on the remote Celestial
+host. The resulting `celestial.bin` is the host worker, not a guest workload.
 
 ## Python environment
 

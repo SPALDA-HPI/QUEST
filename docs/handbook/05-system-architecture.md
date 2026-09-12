@@ -10,7 +10,7 @@ worker control uses gRPC, a remote procedure call framework.
 ```mermaid
 flowchart LR
     TOML[quickstart/quickstart.toml] --> Config[celestial.config.Config]
-    Config --> Satgen[satgen.py and SatgenConstellation]
+    Config --> Satgen[SatgenConstellation]
     Satgen --> Archive[ZipSerializer topology archive]
     Archive --> Coordinator[celestial.py coordinator]
     Coordinator --> GRPC[proto/celestial gRPC]
@@ -30,13 +30,11 @@ constellation.
 | --- | --- | --- |
 | `compile.Dockerfile`, `celestial-make` | pinned protobuf/extended Berkeley Packet Filter (eBPF)/Go toolchain | generated bindings and `celestial.bin` |
 | `builder/` | constructs an Alpine-based guest root filesystem | `.img` root filesystem |
-| `kernel/` | applies a supplied Linux config in a container | `vmlinux-*.bin` guest kernel |
+| `kernel/` | required kernel can be directly downloaded; keeps its configuration for reference | `vmlinux-5.12.bin`guest kernel |
 | `Makefile` | records supported build commands | local generated artifacts |
 
-Source fact: `Makefile` targets Linux/amd64 for the worker and local build
-containers.
 
-Why it matters: a successful image build proves that an artifact can be
+A successful image build proves that an artifact can be
 constructed. It does not prove that the remote host has KVM or that the
 workload behaves correctly inside a microVM.
 
@@ -53,14 +51,6 @@ each ground station. Each shell applies the selected contacts, activation,
 routes, and differences. `ZipSerializer` writes only initial state and changes
 needed by the runtime.
 
-Source fact: ground-station backhaul and ground-station activation are emitted
-during `SatgenConstellation.__init__`; satellite/contact differences are
-emitted during `step`.
-
-Why it matters: a static backhaul link does not wait for satellite visibility,
-while a contact and a contact-activated satellite can change at every
-resolution interval.
-
 ## Coordination plane
 
 The Python coordinator is a deterministic replay process:
@@ -75,11 +65,8 @@ The Python coordinator is a deterministic replay process:
    configured timestep.
 6. The coordinator sends `Stop` when the duration ends or it is interrupted.
 
-Source fact: the coordinator follows wall-clock time after initialization and
+The coordinator follows wall-clock time after initialization and
 prepares the next update before its target timestep.
-
-Why it matters: topology generation time is not part of measured emulation
-time, while slow worker initialization can delay when the timed replay begins.
 
 ## Worker runtime plane
 
@@ -102,12 +89,8 @@ state. Its virtualization interface is implemented by `pkg/virt`, which:
 `pkg/dns` resolves private `.celestial` names. `pkg/info` exposes current
 machine, constellation, and path state to guests.
 
-Source fact: the Go worker uses `/celestial` for kernels, root images,
+The Go worker uses `/celestial` for kernels, root images,
 overlays, peering keys, and console output.
-
-Why it matters: this fixed path is a host-runtime contract. A filename that is
-valid in TOML still fails at runtime if the corresponding artifact was not
-installed under `/celestial`.
 
 ## Data contracts between planes
 
@@ -120,10 +103,8 @@ TOML
           Firecracker/network operations
 ```
 
-The ZIP is not a general dataset archive. It records emulator control state.
-The gRPC schema is not a student-facing query protocol. A spatial workload
-defines its own guest data and result contracts.
-
+The ZIP records emulator control state.
+The gRPC schema is not a user-facing query protocol.
 ## Failure ownership
 
 - TOML/schema error: configuration plane.

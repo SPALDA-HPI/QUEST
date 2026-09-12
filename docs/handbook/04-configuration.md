@@ -16,12 +16,14 @@ duration = 120
 
 `ground_station_contact` means a satellite microVM runs only while a direct
 contact has been selected. Selection occurs after visibility and antenna
-limits are known. By contrast, `bbox` activates every satellite whose modeled
-subpoint lies inside the geographic bounding box.
+limits are known. 
 
+By contrast, `bbox` activates every satellite whose modeled
+subpoint lies inside the geographic bounding box.
 The bounding box is `[south latitude, west longitude, north latitude, east
-longitude]` in degrees. It remains useful for position output even when it no
-longer controls activation. A five-second resolution produces 24 update
+longitude]` in degrees. 
+
+A five-second resolution produces 24 update
 intervals over 120 seconds.
 
 An omitted `offset` defaults to zero. Offset changes the starting point along
@@ -63,7 +65,7 @@ kernel = "vmlinux-5.12.bin"
 rootfs = "server.img"
 ```
 
-Every satellite initially inherits one virtual CPU, 256 mebibytes (MiB) of
+Every satellite node initially inherits one virtual CPU, 256 mebibytes (MiB) of
 memory, a sparse writable overlay with a one-MiB maximum, and the named guest
 kernel/root filesystem. The worker resolves the two filenames below
 `/celestial`.
@@ -87,9 +89,6 @@ Four planes times eight satellites create 32 nodes. Altitude is kilometers
 above the modeled Earth radius. Inclination is the angle to the equatorial
 plane. A 360-degree ascending-node arc spreads planes around the Earth.
 Eccentricity zero gives circular orbits.
-
-These parameters are controlled inputs, not a statement that the shell
-matches a named operational constellation.
 
 ## Potsdam ground station and override
 
@@ -124,9 +123,7 @@ antenna_number = 1
 
 Berlin creates a second, always-active ground-station microVM and inherits the
 global server image. Its single antenna permits one selected direct satellite
-contact. Existing Celestial supported multiple station definitions; QUEST's
-retained scheduler applies the per-station limits across all shells.
-
+contact.
 ## Inheritance model
 
 The effective value is built from global defaults and then a local override:
@@ -137,19 +134,6 @@ global network/compute table → shell or ground-station table → typed object
 
 An override need contain only changed keys. Direct backhaul is global and is
 not a local override.
-
-## Validation is not calibration
-
-Run:
-
-```sh
-. .venv/bin/activate
-python3 satgen.py quickstart/quickstart.toml quickstart/quickstart.zip
-```
-
-This checks syntax, schema, cross-field rules, and whether topology generation
-can complete. It does not establish that values represent a real antenna,
-payload, radio band, or mission.
 
 The [complete configuration reference](../reference/configuration.md) lists
 types, units, enforced limits, and the places where physical recommendations

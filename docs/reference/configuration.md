@@ -192,6 +192,22 @@ The normal validation path is topology generation:
 python3 satgen.py INPUT.toml OUTPUT.zip
 ```
 
+Run it on the local workstation in its Python 3.11 virtual environment. The
+remote coordinator uses a separate virtual environment created from the same
+requirements. For an isolated generation equivalent:
+
+```sh
+make satgen-docker
+docker run --rm \
+    -v "$(pwd)":/app \
+    satgen-docker \
+    /app/INPUT.toml \
+    /app/OUTPUT.zip
+```
+
+The original Celestial Quick Start uses the native Python command; Docker is
+an optional generation path.
+
 Invalid TOML syntax fails while loading. A valid TOML document can still fail
 the QUEST schema or cross-field checks. A successful parse is not evidence
 that the orbital or network assumptions are physically realistic.

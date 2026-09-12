@@ -1,11 +1,14 @@
 # QUEST: Querying and Understanding Earth across Space and Time
+
 ## What QUEST Is
 
-QUEST is derived from [Celestial](https://github.com/OpenFogStack/celestial), which combines orbital/network topology generation with real workload
-execution in Firecracker microVMs. Satellite motion changes contacts, routes,
-link properties, and which satellite microVMs are active over time.
- The platform intended for research prototypes such as distributed spatial
-filters, joins, aggregations, placement strategies, and workload generators.
+QUEST is derived from
+[Celestial](https://github.com/OpenFogStack/celestial), which combines
+orbital/network topology generation with real workload execution in
+Firecracker microVMs. Satellite motion changes contacts, routes, link
+properties, and which satellite microVMs are active over time. The platform is
+intended for research prototypes such as distributed spatial filters, joins,
+aggregations, placement strategies, and workload generators.
 
 ## Start Here
 
@@ -42,10 +45,10 @@ configuration
 ```
 
 `satgen.py` validates TOML input and computes positions, contacts, routes,
-activation, and timed differences. 
+activation, and timed differences.
 
 `celestial.py` replays the resulting ZIP to
-one or more workers. 
+one or more workers.
 
 `celestial.bin`, built from `celestial.go` and `pkg/`,
 controls Firecracker guests and host networking.
@@ -66,7 +69,7 @@ QUEST/
 ├── pkg/                   Go server, orchestration, VM, network, DNS, and HTTP code
 ├── proto/                 gRPC schema and generated bindings
 ├── builder/               guest root-filesystem builder
-├── kernel/                guest-kernel builder and configs
+├── kernel/                guest-kernel configuration and advanced builder
 ├── animation/             topology visualization support
 ├── quickstart/            beginner validator example
 ├── docs/handbook/         progressive student handbook
