@@ -43,8 +43,8 @@ POSIX commands shown here. Native PowerShell commands are outside this guide.
 
 You need:
 
-- local: Git, a POSIX shell, Python 3, `make`, `ssh`, `scp`, and Docker;
-- remote: Linux/amd64, Git, a POSIX shell, Go 1.22.1 or compatible, Python 3,
+- local: Git, a POSIX shell, Python 3.11, `make`, `ssh`, `scp`, and Docker;
+- remote: Linux/amd64, Git, a POSIX shell, Go 1.22.1 or compatible, Python 3.11,
   `make`, Firecracker, WireGuard tools, `ip`, `iptables`, `tc`, and KVM access;
 - GitHub access to `hzhang4433/QUEST` while the repository is private.
 
@@ -145,18 +145,20 @@ Check the local tools from the repository root.
 
 ```sh
 git --version
-python3 --version
+python3.11 --version
 make --version
 docker version
 ```
 
 Create a Python virtual environment. A virtual environment keeps this
-project's Python packages separate from system Python.
+project's Python packages separate from system Python. Use Python 3.11,
+matching CI; see the [environment guide](../docs/handbook/03-development-environments.md#python-virtual-environments)
+for installation and VS Code interpreter selection.
 
 **[LOCAL]**
 
 ```sh
-python3 -m venv .venv
+python3.11 -m venv .venv
 . .venv/bin/activate
 python3 -m pip install -r requirements.txt
 ```
@@ -329,7 +331,7 @@ Create the remote Python environment and build the Linux worker natively.
 ```sh
 cd QUEST
 export PATH="$HOME/.local/go/bin:$HOME/.local/bin:$PATH"
-python3 -m venv .venv
+python3.11 -m venv .venv
 . .venv/bin/activate
 python3 -m pip install -r requirements.txt
 go version

@@ -1,0 +1,8 @@
+# Local source browsing, plotting, and auxiliary checks; not guest dependencies.
+-r requirements.txt
+-r requirements-animation.txt
+-r quickstart/requirements.txt
+pandas-stubs==2.1.1.230928
+types-protobuf==4.24.0.20240106
+requests==2.31.0
+scipy==1.11.4

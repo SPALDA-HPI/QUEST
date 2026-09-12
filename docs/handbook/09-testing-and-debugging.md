@@ -26,6 +26,20 @@ python3 -m unittest discover -s test -p 'test_*.py' -v
 python3 -m mypy --config-file setup.cfg *.py
 ```
 
+VS Code's Pylance and mypy are separate checkers. A passing mypy run does not
+guarantee an empty Problems panel. Install `requirements-dev.txt` and select
+the Python 3.11 environment as described in the
+[environment guide](03-development-environments.md#python-virtual-environments).
+With Node.js/npm installed, the equivalent standalone Pyright check is:
+
+```sh
+npm exec --yes --package=pyright@1.1.411 -- pyright
+```
+
+This version matches Pylance 2026.3.1. The repository configuration documents
+the generated-binding exception; it does not disable checking handwritten
+code. CI continues to use the original `mypy==1.9.0` pin.
+
 Write a failing test before changing behavior. Confirm that it fails for the
 missing behavior, implement the smallest change, then run the focused and full
 suites.
