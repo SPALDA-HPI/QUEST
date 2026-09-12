@@ -1,7 +1,7 @@
 # 3. Development Environments
 
-QUEST crosses three environments. Many first-run errors come from executing a
-correct command in the wrong one.
+QUEST crosses three environments. So executing a
+correct command in the wrong one will induce errors.
 
 ## Local workstation
 
@@ -11,13 +11,12 @@ Linux/amd64 guest root filesystems and the guest kernel. It can also generate
 topologies and run unit tests, but it does not run the privileged worker on
 macOS or Windows.
 
-Docker is appropriate here because these container networks are separate from
+<ins>Docker is appropriate here</ins> because these container networks are separate from
 the clean Celestial runtime host.
 
-## HPI remote VM
+## Remote VM
 
-The unnamed remote VM is a clean Linux/amd64 environment shared by the student
-cohort. It builds `celestial.bin` with Go, generates the quickstart topology
+The remote VM should run in a Linux/amd64 environment. It builds `celestial.bin` with Go, generates the quickstart topology
 with Python, and runs the worker and coordinator in separate terminals.
 
 Always use the assigned name through a variable:

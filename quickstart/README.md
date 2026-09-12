@@ -174,7 +174,7 @@ python3 -c 'import sys; print(sys.executable)'
 
 Checkpoint: the path contains `QUEST/.venv/`.
 
-## 3. Prepare the HPI Remote VM
+## 3. Prepare the Remote VM
 
 First inspect the operating system; do not assume a distribution.
 

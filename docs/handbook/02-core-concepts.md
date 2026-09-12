@@ -7,7 +7,7 @@ the 32-satellite quickstart configuration.
 
 **Low-Earth Orbit (LEO).** An Earth orbit at relatively low altitude. The
 quickstart models satellites at 550 km; QUEST uses the configured altitude in
-its propagator rather than assuming one universal LEO height.
+its propagator.
 
 **Constellation.** A coordinated collection of satellites. In QUEST, the full
 constellation contains every configured shell and ground station.
@@ -27,9 +27,7 @@ direct radio-style links to selected visible satellites. `potsdam` and
 `berlin` are the two quickstart stations.
 
 **Spatial workload.** Code whose behavior depends on location, geometry, or
-Earth-observation coverage. A future workload might test whether an image
-footprint intersects an area of interest; the quickstart validator is only a
-network sanity workload.
+Earth-observation coverage.
 
 ## Contact and network terms
 
@@ -64,9 +62,6 @@ Each selected antenna contact receives the full configured contact bandwidth;
 microseconds. Guest ping normally observes a round trip plus execution and
 physical-host effects.
 
-**Route.** The selected sequence of links between two machines. A resolved
-DNS name does not prove that a route is currently unblocked.
-
 ## Time and state terms
 
 **Topology timestep.** One generated instant at which QUEST can apply changed
@@ -97,8 +92,7 @@ Each active QUEST node runs one Firecracker microVM.
 microVMs on the remote Linux worker.
 
 **Kernel-based Virtual Machine (KVM).** The Linux virtualization interface
-Firecracker accesses through `/dev/kvm`. Nested KVM must be supplied by the
-administrator when the worker itself is a VM.
+Firecracker accesses through `/dev/kvm`. Nested KVM must be supported when the worker itself is a VM.
 
 **Guest kernel.** The Linux `vmlinux` binary booted inside every microVM. It is
 built locally and copied to `/celestial` on the worker.
@@ -143,6 +137,3 @@ configure
 → collect results
 ```
 
-Checkpoint: explain, in your own words, why a satellite can exist in the
-topology while its microVM is suspended, and why an eligible ground contact
-may not be selected when `antenna_number` is set.
