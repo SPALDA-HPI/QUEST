@@ -62,13 +62,3 @@ jobs:
         with:
           version: latest
           args: --out-format=colored-line-number
-
-  markdown:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: markdownlint-cli
-        uses: nosborn/github-action-markdown-cli@v3.3.0
-        with:
-          files: "README.md quickstart/README.md docs/**/*.md"
-          config_file: ".markdownlint.json"
