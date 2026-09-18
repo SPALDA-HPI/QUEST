@@ -26,7 +26,7 @@ suspended.
 direct radio-style links to selected visible satellites. `potsdam` and
 `berlin` are the two quickstart stations.
 
-**Spatial workload.** Code whose behavior depends on location, geometry, or
+**Spatial application.** Code whose behavior depends on location, geometry, or
 Earth-observation coverage.
 
 ## Contact and network terms
@@ -85,7 +85,7 @@ run.
 **Virtual machine (VM).** Software emulating a computer. QUEST uses small
 microVMs rather than general-purpose desktop VMs.
 
-**MicroVM.** A minimal virtual machine optimized for fast, isolated workloads.
+**MicroVM.** A minimal virtual machine optimized for applications.
 Each active QUEST node runs one Firecracker microVM.
 
 **Firecracker.** The virtual machine monitor that creates and controls QUEST
@@ -98,7 +98,7 @@ Firecracker accesses through `/dev/kvm`. Nested KVM must be supported when the w
 built locally and copied to `/celestial` on the worker.
 
 **Root filesystem.** The read-only `.img` containing the guest operating
-system, dependencies, and workload startup script.
+system, dependencies, and application startup script.
 
 **Overlay disk.** A per-machine writable ext4 file layered over the read-only
 root. The validator writes its CSV to this disk.
@@ -121,7 +121,7 @@ updates into operations on virtualization, peer, and network backends.
 **Topology generation.** The offline calculation performed by `satgen.py`.
 It computes positions, contacts, routing, activation, and time-indexed changes.
 
-**Emulation.** Executing real workload code in microVMs while applying the
+**Emulation.** Executing real application code in microVMs while applying the
 generated network and machine state in wall-clock time. The emulator is not a
 physical satellite or radio.
 
@@ -136,4 +136,3 @@ configure
 → apply timed updates
 → collect results
 ```
-

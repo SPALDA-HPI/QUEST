@@ -1,6 +1,6 @@
-# 8. Building Workloads
+# 8. Building Applications
 
-A QUEST workload is ordinary Linux software packaged into a guest root
+A QUEST application is ordinary Linux software packaged into a guest root
 filesystem. Begin with the two quickstart examples before adding a language,
 database, or data dependency.
 
@@ -16,7 +16,7 @@ The builder starts from an Alpine Linux 3.18 minirootfs and adds the init,
 network, overlay, time, and shutdown scripts expected by Celestial. A build
 invocation can mount three inputs:
 
-- `/app.sh` is required and becomes the guest workload entry point;
+- `/app.sh` is required and becomes the guest application entry point;
 - `/base.sh` is optional and runs inside the root filesystem at build time;
 - `/files/` is optional and its contents are copied into the image root.
 
@@ -80,10 +80,10 @@ Write results under the guest's normal filesystem, such as
 comma-separated values (CSV) file. Do not try to modify the read-only image
 during a run.
 
-## Add a new workload minimally
+## Add a minimal application
 
 1. Copy one quickstart `app.sh` and give it a descriptive name.
-2. Put only runtime files beneath a small workload directory.
+2. Put only runtime files beneath a dedicated application directory.
 3. Add a `base.sh` only if packages must be installed at image-build time.
 4. Build one ignored `.img` locally.
 5. Set `rootfs` in a copied Tom's Obvious Minimal Language (TOML)
@@ -98,9 +98,9 @@ console output bounded and flush result files before shutdown.
 
 QUEST intentionally does not provide an attached read-only satellite data
 drive. Put small, immutable inputs into the root image through `/files`, or
-design an explicit workload transfer/storage mechanism. Large scientific dataset
-should remain outside the platform repository and be documented with a stable
-identifier or preparation procedure.
+design an explicit application-specific data transfer or storage mechanism.
+Large scientific datasets should remain outside the platform repository and
+be documented with a stable identifier or preparation procedure.
 
 ## Checkpoint
 

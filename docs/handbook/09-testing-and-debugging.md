@@ -89,8 +89,8 @@ unzip -l quickstart/quickstart.zip
 ```
 
 This proves that configuration, orbit/contact calculation, and serialization
-complete for the example. It does not start Firecracker or validate a workload
-inside a guest.
+complete for the example. It does not start Firecracker or validate an
+application inside a guest.
 
 ## Read logs from the right layer
 

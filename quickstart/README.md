@@ -90,7 +90,7 @@ quickstart/
 ├── requirements.txt          local result-analysis packages
 ├── check_validator.py        converts validator CSV data into graphs
 └── validator/
-    ├── server.sh             long-running satellite workload
+    ├── server.sh             long-running satellite application
     ├── validator-base.sh     installs validator dependencies in its image
     ├── validator.py          compares reported and measured latency
     └── validator.sh          starts validator.py inside the ground station

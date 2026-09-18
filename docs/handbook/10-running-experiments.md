@@ -10,8 +10,8 @@ Write one sentence naming the independent change and outcome. For example:
 
 > How does reducing a ground station from two antennas to one change the time between a selected contact and validator reachability in this topology?
 
-Do not change constellation size, antenna count, activation, workload, and run
-duration together unless the experiment explicitly studies their interaction.
+Do not change constellation size, antenna count, activation, application, input dataset, and run duration together unless the experiment explicitly
+studies their interaction.
 
 ## 2. Copy the known-good input
 
@@ -38,9 +38,9 @@ On the remote VM, record `git rev-parse HEAD`, `python3 --version`,
 `go version` when installed for project development, and
 `firecracker --version`. Do not install or invoke Docker there.
 
-Also record the full Tom's Obvious Minimal Language (TOML) input, workload
-source, guest image build command, kernel config/filename, host class/resources,
-and whether the worker used eBPF or netem.
+Also record the full Tom's Obvious Minimal Language (TOML) input, application
+source and input data, guest image build command, kernel config/filename, host
+class/resources, and whether the worker used eBPF or netem.
 ## 4. Validate and build inputs
 
 
@@ -110,9 +110,9 @@ not a completed sample.
 
 ## 6. Collect raw evidence before analysis
 
-Preserve raw coordinator/worker/guest logs and workload output before creating
-plots or summaries. Read overlays only after complete shutdown and mount them
-read-only. Associate each result with:
+Preserve raw coordinator/worker/guest logs and application output before
+creating plots or summaries. Read overlays only after complete shutdown and
+mount them read-only. Associate each result with:
 
 - run identifier and timestamp;
 - Git commit;
@@ -137,4 +137,3 @@ scientific accuracy guarantee.
 
 Recreate the runtime boundary for each sample. Randomize or alternate method
 order when host drift could bias one method.
-

@@ -1,6 +1,6 @@
 # Runtime Reference
 
-This section describes interfaces visible to guest workloads and the host
+This section describes interfaces visible to guest applications and the host
 network behavior that supports them.
 
 - [Networking](networking.md): guest addressing, paths, link emulation, and

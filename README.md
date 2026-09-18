@@ -4,11 +4,11 @@
 
 QUEST is derived from
 [Celestial](https://github.com/OpenFogStack/celestial), which combines
-orbital/network topology generation with real workload execution in
-Firecracker microVMs. Satellite motion changes contacts, routes, link
+orbital/network topology generation with the execution of real applications
+in Firecracker microVMs. Satellite motion changes contacts, routes, link
 properties, and which satellite microVMs are active over time. The platform is
 intended for research prototypes such as distributed spatial filters, joins,
-aggregations, placement strategies, and workload generators.
+aggregations, placement strategies, and application prototypes.
 
 ## Start Here
 
@@ -88,7 +88,7 @@ The handbook is deliberately progressive:
 5. [System architecture](docs/handbook/05-system-architecture.md)
 6. [Startup call flow](docs/handbook/06-startup-call-flow.md)
 7. [Source-code reading guide](docs/handbook/07-source-code-reading-guide.md)
-8. [Building workloads](docs/handbook/08-building-workloads.md)
+8. [Building applications](docs/handbook/08-building-applications.md)
 9. [Testing and debugging](docs/handbook/09-testing-and-debugging.md)
 10. [Running experiments](docs/handbook/10-running-experiments.md)
 11. [Glossary](docs/handbook/11-glossary.md)

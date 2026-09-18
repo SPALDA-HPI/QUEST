@@ -8,7 +8,7 @@ The worker forwards each guest's standard output and standard error to
 `gst-potsdam.out`/`gst-potsdam.err`.
 
 Heavy console output writes to host storage and can perturb a performance
-experiment. Prefer concise structured records for measured workloads.
+experiment. Prefer concise structured records for application measurements.
 
 ## Writable overlays
 

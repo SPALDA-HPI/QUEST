@@ -39,7 +39,7 @@ make celestial.bin
 
 The Makefile sets `GOOS=linux` and `GOARCH=amd64`. This is not the beginner
 quickstart path and is not a reason to install Docker on the remote Celestial
-host. The resulting `celestial.bin` is the host worker, not a guest workload.
+host. The resulting `celestial.bin` is the host worker, not a guest application.
 
 ## Python environment
 

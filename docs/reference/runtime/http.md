@@ -1,7 +1,7 @@
 # HTTP Information API
 
 The worker exposes a read-only Hypertext Transfer Protocol (HTTP) information
-service to each guest through its gateway. Workloads built with the repository
+service to each guest through its gateway. Applications built with the repository
 builder can use `http://info.celestial`.
 
 All examples below are guest-side `GET` requests. Identifiers use shell 1 and
@@ -25,7 +25,7 @@ and satellite ID, and current `active` flag.
 
 Returns every shell and ground station with identifiers and satellite active
 flags. This can be large for a full constellation; prefer the narrower routes
-below inside frequent workload loops.
+below inside frequently executed application loops.
 
 ## `GET /shell/{shell}`
 

@@ -15,5 +15,5 @@ are addressed by their configured unique name.
 
 DNS returns the address of a known configured machine even when that machine
 is inactive or the current topology has no usable path to it. Name resolution
-therefore does not prove reachability. A workload must handle timeouts and can
+therefore does not prove reachability. An application must handle timeouts and can
 query the [HTTP information API](http.md) for current state.

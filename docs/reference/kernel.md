@@ -34,7 +34,7 @@ support. `CONFIG_RANDOM_TRUST_CPU=y` helps many concurrently booting guests
 avoid blocking on a depleted entropy pool when the host CPU source is
 acceptable for the experiment.
 
-If a workload needs an unavailable kernel feature, discuss the change with the
+If an application needs an unavailable kernel feature, discuss the change with the
 project supervisor, copy the supplied config, change only the required
 options, build a matching filename, and update the TOML `kernel` field. Record
 that configuration with the experiment.

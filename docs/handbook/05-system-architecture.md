@@ -36,7 +36,7 @@ constellation.
 
 A successful image build proves that an artifact can be
 constructed. It does not prove that the remote host has KVM or that the
-workload behaves correctly inside a microVM.
+application behaves correctly inside a microVM.
 
 ## Topology-generation plane
 
@@ -112,7 +112,7 @@ The gRPC schema is not a user-facing query protocol.
 - ZIP parse or timing error: coordinator plane.
 - gRPC registration/update error: coordination boundary.
 - missing `/dev/kvm`, interface, or artifact: worker-host boundary.
-- workload exception or missing result: guest/rootfs boundary.
+- application exception or missing result: guest/rootfs boundary.
 - wrong scientific conclusion despite a successful run: experiment design.
 
 ## Checkpoint

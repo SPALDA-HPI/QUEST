@@ -7,9 +7,9 @@ processing across Low-Earth Orbit (LEO) satellite constellations. It gives a com
 ground contact, constrained antennas, virtual machines, and changing network
 paths can affect a distributed application.
 
-The repository begins with a clean validator workload rather than a completed
+The repository begins with a clean validator application rather than a completed
 spatial database. Your project work should add a clearly scoped spatial
-operator or workload and measure it under documented assumptions.
+operator or application and measure it under documented assumptions.
 
 
 ## What QUEST Provides
@@ -34,7 +34,7 @@ QUEST does not provide a finished query language, distributed database,
 Earth-observation data product, or calibrated model
 of a specific commercial constellation. It also does not hide the experiment
 environment: you must record the input configuration, code commit, host
-conditions, workload, and interpretation of each metric.
+conditions, application and dataset, and interpretation of each metric.
 
 
 
@@ -49,9 +49,8 @@ conditions, workload, and interpretation of each metric.
    [Startup Call Flow](06-startup-call-flow.md).
 5. Follow the [Source-Code Reading Guide](07-source-code-reading-guide.md)
    with the repository open beside it.
-6. Build a workload, test it, and design an experiment using chapters 8–10.
+6. Build an application, test it, and design an experiment using chapters 8–10.
 7. Use the [Glossary](11-glossary.md) and
    [technical reference](../reference/configuration.md) while working.
-
 
 

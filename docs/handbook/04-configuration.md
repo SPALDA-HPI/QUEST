@@ -109,7 +109,7 @@ rootfs = "validator.img"
 Potsdam is fixed at the given latitude/longitude. At most two direct satellite
 contacts can be selected across all shells. Its compute override inherits the
 global kernel but replaces memory, overlay size, and root image so the
-validator workload runs there.
+validator application runs there.
 
 ## Berlin ground station
 

@@ -36,13 +36,13 @@ networking, port, and `/celestial` state are shared.
 
 ## Guest microVM
 
-A guest is the machine seen by a satellite or ground-station workload. It has
-its own `eth0`, DNS, gateway information service, read-only root filesystem,
-and writable overlay. It does not contain the QUEST source checkout unless you
-explicitly put source into the root image.
+A guest is the execution environment for a satellite or ground-station
+application. It has its own `eth0`, DNS, gateway information service, read-only
+root filesystem, and writable overlay. It does not contain the QUEST source
+checkout unless you explicitly put source into the root image.
 
 `builder/ceinit` prepares the guest, and the image's `/app.sh` starts the
-workload. Debugging a guest therefore begins with its host-side output under
+application. Debugging a guest therefore begins with its host-side output under
 `/celestial/out`, not with the coordinator terminal alone.
 
 ## POSIX shell essentials

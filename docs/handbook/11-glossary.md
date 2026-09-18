@@ -7,7 +7,8 @@ See [Core Concepts](02-core-concepts.md#time-and-state-terms).
 selected direct contacts across all shells.
 
 **Area of interest (AOI).** A geographic region relevant to a spatial query or
-workload; it is a workload concept, not a built-in QUEST database object.
+application; it is an application-level concept, not a built-in QUEST database
+object.
 
 **Backhaul.** A modeled direct terrestrial-style link between ground stations,
 configured by bandwidth and path stretch.
@@ -73,7 +74,7 @@ ground-station name.
 writable-overlay size.
 
 **MicroVM.** A minimal virtual machine optimized for lightweight isolated
-workloads.
+applications.
 
 **Network emulation (netem).** QUEST's alternate Linux traffic-control backend
 selected with `-em-backend netem`.
@@ -109,7 +110,7 @@ machines.
 **SGP4.** Simplified General Perturbations 4, the orbit propagator used during
 topology generation.
 
-**Spatial workload.** An application whose computation depends on location,
+**Spatial application.** Software whose computation depends on location,
 geometry, coverage, or spatial relationships.
 
 **Suspend.** Pause a microVM while retaining its memory/state for later resume.
