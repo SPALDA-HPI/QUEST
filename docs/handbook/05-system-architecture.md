@@ -115,6 +115,8 @@ The gRPC schema is not a user-facing query protocol.
 - workload exception or missing result: guest/rootfs boundary.
 - wrong scientific conclusion despite a successful run: experiment design.
 
-Checkpoint: draw the path from `antenna_number = 1` to a guest ping. Mark the
+## Checkpoint
+
+Draw the path from `antenna_number = 1` to a guest ping. Mark the
 point where the antenna choice is calculated, serialized, transmitted, and
 finally enforced as a blocked/unblocked network path.

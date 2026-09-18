@@ -1,10 +1,12 @@
 # 6. Startup Call Flow
 
 This chapter follows actual entry points and symbols. “Source fact” names what
-the checked-in code does. “Why it matters” gives teaching interpretation, not
-measured evidence.
+the checked-in code does. “Why it matters” gives teaching interpretation.
 
 ## Phase A: topology archive generation
+
+This phase runs on the local workstation, either in the Python 3.11 virtual
+environment or through the optional `satgen-docker` image.
 
 ```text
 satgen.py
@@ -21,22 +23,16 @@ satgen.py
   → ZipSerializer.persist()
 ```
 
-Source fact: `Config` validates the user dictionary, fills defaults and
+Source fact 1: `Config` validates the user dictionary, fills defaults and
 overrides, then constructs typed shell, ground-station, and machine settings.
 
-Why it matters: a TOML parser accepting a file is not enough; the project
-cross-field rules run in `Config`.
-
-Source fact: `SatgenConstellation.__init__` calls
+Source fact 2: `SatgenConstellation.__init__` calls
 `ZipSerializer.init_machine` for every satellite and ground station. It emits
 one unblocked direct backhaul link for every unordered station pair when the
 paired global backhaul fields are enabled. It also emits each ground station
 as active at the initial time.
 
-Why it matters: “initial machine” describes what can exist. A separate machine
-state difference says what is active.
-
-Source fact: `Shell.prepare_step` updates satellite/ground positions and
+Source fact 3: `Shell.prepare_step` updates satellite/ground positions and
 exposes valid direct links. `SatgenConstellation.step` combines visible links
 from every shell before calling the one shared `AntennaScheduler`. It passes
 each shell only its selected satellite IDs. `Shell.finish_step` filters direct
@@ -45,12 +41,12 @@ links, calculates activation and routes, and creates differences.
 Why it matters: a station's finite antennas are shared across shells, not
 reset independently per shell.
 
-Source fact: `ZipSerializer.persist` closes writers and creates the final ZIP.
-
-Why it matters: do not run the coordinator against a partially generated
-archive.
+Source fact 4: `ZipSerializer.persist` closes writers and creates the final ZIP.
 
 ## Phase B: worker startup
+
+`celestial.bin` is compiled locally with `./celestial-make celestial.bin`,
+copied to the remote Linux/amd64 VM, and started there.
 
 ```text
 celestial.go main
@@ -75,6 +71,9 @@ created. It does not mean a coordinator has registered or a microVM has booted.
 
 ## Phase C: coordinator startup
 
+The coordinator runs in a second terminal on the same remote VM as the worker
+and connects to `127.0.0.1:1969`.
+
 ```text
 celestial.py
   → ZipDeserializer(topology.zip)
@@ -97,31 +96,31 @@ generated topology archive is identical.
 
 Source fact: `make_update_request_iter` batches machine and link differences
 into protocol messages, and `Host.update` sends a client stream to the
-worker's `Update` method.
-
-Why it matters: one logical timestep can contain several streamed messages;
-do not equate gRPC message count with topology timestep count.
-
+worker's `Update` method. One logical timestep can contain several streamed messages.
 ## Phase D: server and orchestrator calls
 
 ```text
 gRPC Register
-  → peer.Register(...)
+  → server.Server.Register(...)
+      → peer.Register(...)
 
 gRPC Init
-  → peer.InitPeering(...)
-  → Orchestrator.Initialize(...)
-      → Virt.RegisterMachine(...)
+  → server.Server.Init(...)
+      → peer.InitPeering(...)
+      → Orchestrator.Initialize(...)
+          → Virt.RegisterMachine(...)
 
 gRPC Update stream
-  → Orchestrator.Update(state)
-      → Virt.StartMachine(...) or StopMachine(...)
-      → Virt.UnblockLink(...) or BlockLink(...)
-      → Virt.SetLatency(...)
-      → Virt.SetBandwidth(...)
+  → server.Server.Update(...)
+      → Orchestrator.Update(state)
+          → Virt.StartMachine(...) or StopMachine(...)
+          → Virt.UnblockLink(...) or BlockLink(...)
+          → Virt.SetLatency(...)
+          → Virt.SetBandwidth(...)
 
 gRPC Stop
-  → Orchestrator.Stop()
+  → server.Server.Stop(...)
+      → Orchestrator.Stop()
 ```
 
 Source fact: `Virt.StartMachine` transitions a registered or suspended machine
@@ -170,6 +169,8 @@ duration completion or interruption. `celestial.go` separately listens for
 interrupt/termination signals and stops the orchestrator and DNS/gRPC
 services.
 
-Checkpoint: identify the last function that can reject an invalid
+## Checkpoint
+
+Identify the last function that can reject an invalid
 `antenna_number`, the first function that sees visible contacts from all
 shells, and the Go method that receives the resulting runtime link changes.

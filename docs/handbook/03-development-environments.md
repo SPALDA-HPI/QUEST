@@ -145,6 +145,8 @@ availability, Docker presence, KVM device access, and default interface. It
 does not install, delete, or reconfigure anything.
 
 
-Checkpoint: for each file below, name the environment that creates it:
+## Checkpoint
+
+For each file below, name the environment that creates it:
 `quickstart/quickstart.zip`, `kernel/vmlinux-5.12.bin`,
 `/celestial/cegst-potsdam.ext4`, and `quickstart/graphs/results_scatter.png`.

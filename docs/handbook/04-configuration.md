@@ -139,6 +139,8 @@ The [complete configuration reference](../reference/configuration.md) lists
 types, units, enforced limits, and the places where physical recommendations
 are stricter than code validation.
 
-Checkpoint: predict which fields Potsdam inherits, which it overrides, and
+## Checkpoint
+
+Predict which fields Potsdam inherits, which it overrides, and
 what must change before `antenna_number` can be combined with connection type
 `one` (answer: remove the antenna field or use `all`).

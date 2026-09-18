@@ -8,8 +8,7 @@ scale is useful only after correctness is visible.
 
 Write one sentence naming the independent change and outcome. For example:
 
-> How does reducing a ground station from two antennas to one change the time
-> between a selected contact and validator reachability in this topology?
+> How does reducing a ground station from two antennas to one change the time between a selected contact and validator reachability in this topology?
 
 Do not change constellation size, antenna count, activation, workload, and run
 duration together unless the experiment explicitly studies their interaction.
@@ -32,30 +31,66 @@ On the local build workstation, capture at least:
 ```sh
 git rev-parse HEAD
 python3 --version
-go version
 docker version
 ```
 
 On the remote VM, record `git rev-parse HEAD`, `python3 --version`,
-`go version`, and `firecracker --version`. Do not install or invoke Docker
-there.
+`go version` when installed for project development, and
+`firecracker --version`. Do not install or invoke Docker there.
 
 Also record the full Tom's Obvious Minimal Language (TOML) input, workload
 source, guest image build command, kernel config/filename, host class/resources,
-and whether the worker used eBPF or netem. Do not publish the assigned HPI
-hostname or credentials.
-
+and whether the worker used eBPF or netem.
 ## 4. Validate and build inputs
 
-Generate a fresh topology archive from the exact configuration:
+
+
+
+
+Build only artifacts affected by the study: 
+
+### Topology
+
+Generate a fresh topology archive locally from the exact configuration:
 
 ```sh
 . .venv/bin/activate
 python3 satgen.py antenna-one.toml antenna-one.zip
 ```
 
-Build only artifacts affected by the study. Generated ZIPs, binaries, kernels,
-images, overlays, logs, CSVs, and graphs remain untracked.
+`satgen-docker` is an optional equivalent described in the
+[environment chapter](03-development-environments.md#docker-and-generated-artifacts).
+
+
+
+
+
+
+
+### Worker
+
+Build `celestial.bin` locally with: 
+
+```sh 
+./celestial-make celestial.bin
+``` 
+
+### Application
+
+Build guest artifacts(server.img, validator.img, xxx.img, etc.) with:
+
+```sh
+docker run --rm \
+    --platform linux/amd64 \
+    --privileged \
+    -v "$(pwd)/xxx.py":/files/xxx.py \
+    -v "$(pwd)/yyy.sh":/base.sh \
+    -v "$(pwd)/zzz.sh":/app.sh \
+    -v "$(pwd)":/opt/code \
+    rootfsbuilder aaa.img
+```
+
+All of these updated artifacts need to be copied to the remote runtime VM.
 
 ## 5. Run from a clean runtime boundary
 
@@ -68,9 +103,10 @@ Before starting:
 - run the read-only preflight;
 - keep the same code commit and configuration on coordinator and worker.
 
-Start worker first, then coordinator. Save both logs. Record whether the run
-ended normally, was interrupted, or failed; a failed run is not a completed
-sample.
+Start the worker in one remote terminal, then start the Python coordinator in
+a second remote terminal and connect it to `127.0.0.1`. Save both logs. Record
+whether the run ended normally, was interrupted, or failed; a failed run is
+not a completed sample.
 
 ## 6. Collect raw evidence before analysis
 
@@ -84,9 +120,6 @@ read-only. Associate each result with:
 - guest image/kernel identifier or hash;
 - host/backend information;
 - completion/failure status.
-
-Do not silently replace a missing observation with a successful zero, and do
-not pool failures with completed latency samples without an explicit rule.
 
 ## 7. Analyse the named outcome
 
@@ -103,17 +136,5 @@ scientific accuracy guarantee.
 ## 8. Repeat and compare fairly
 
 Recreate the runtime boundary for each sample. Randomize or alternate method
-order when host drift could bias one method. Hold topology, input observations,
-workload semantics, result completeness, and user-visible endpoint constant
-when the causal question is placement or processing strategy.
+order when host drift could bias one method.
 
-## 9. Package the study, not the platform
-
-Commit small source/configuration/analysis inputs in the location agreed for
-the student project. Store large or sensitive raw artifacts in approved
-storage with stable references. Do not add generated evidence, private host
-details, or one cohort's ad hoc launcher to the reusable QUEST root by default.
-
-Checkpoint: another student should be able to identify the exact code,
-configuration, guest artifacts, environment assumptions, raw outputs, and
-analysis that produced every reported figure.

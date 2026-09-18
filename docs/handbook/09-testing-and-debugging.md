@@ -65,11 +65,7 @@ go test ./pkg/orchestrator ./pkg/peer ./pkg/server && \
 go test -c -o /tmp/virt.test ./pkg/virt'
 ```
 
-No output from `gofmt -l` means formatting is clean. Compiling
-`pkg/virt` tests is useful on a local workstation; executing all virtualization
-or eBPF tests can require Linux, root privileges, KVM, TAP devices, and host
-network changes. Do not claim that compilation verifies those effects.
-
+No output from `gofmt -l` means formatting is clean.
 ## Shell checks
 
 Use the interpreter declared by the first line:
@@ -84,6 +80,8 @@ remotely because it is intentionally read-only; build and runtime scripts have
 real side effects.
 
 ## Configuration and topology checks
+
+Run topology generation on the local workstation:
 
 ```sh
 python3 satgen.py quickstart/quickstart.toml quickstart/quickstart.zip
@@ -135,10 +133,6 @@ The files must be installed on every worker that can host the machine.
 coordinator timeouts. Check architecture, KVM, artifact format, and available
 host resources in that order.
 
-**Unexpected latency.** Separate configured one-way `delay_us`, guest ping
-round trip, physical host/network delay, workload scheduling, and clock error.
-A numeric difference alone does not identify which layer is wrong.
-
 ## Verification ladder
 
 ```text
@@ -150,5 +144,4 @@ focused unit test
 → authorized remote KVM run
 ```
 
-Stop at the first failed rung and diagnose that boundary. A later rung must not
-be reported as passed when it was not run.
+Stop at the first failed rung and diagnose that boundary.

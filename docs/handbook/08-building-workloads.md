@@ -98,13 +98,12 @@ console output bounded and flush result files before shutdown.
 
 QUEST intentionally does not provide an attached read-only satellite data
 drive. Put small, immutable inputs into the root image through `/files`, or
-design an explicit workload transfer/storage mechanism. Large scientific data
+design an explicit workload transfer/storage mechanism. Large scientific dataset
 should remain outside the platform repository and be documented with a stable
 identifier or preparation procedure.
 
-Do not add a new abstraction merely to reserve space for future workloads.
-Start with the one image, entry script, and test the current project needs.
+## Checkpoint
 
-Checkpoint: describe which of `app.sh`, `base.sh`, and `/files` is needed for a
+Describe which of `app.sh`, `base.sh`, and `/files` is needed for a
 single statically linked executable, and where its output persists after the
 root image remains read-only.
