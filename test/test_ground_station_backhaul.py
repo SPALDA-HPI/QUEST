@@ -7,7 +7,7 @@ import celestial.types
 import numpy as np
 from celestial.antenna import AntennaScheduler
 from celestial.config import Config
-from celestial.satgen_connstellation import SatgenConstellation
+from celestial.satgen_constellation import SatgenConstellation
 from celestial.shell import GST_SAT_LINK_DTYPE
 from test.test_config_activation import valid_config
 

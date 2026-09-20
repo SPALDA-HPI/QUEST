@@ -53,7 +53,7 @@ import tqdm
 
 import celestial.config
 import celestial.zip_serializer
-import celestial.satgen_connstellation
+import celestial.satgen_constellation
 
 if __name__ == "__main__":
     if len(sys.argv) > 3 or len(sys.argv) < 2:
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     serializer = celestial.zip_serializer.ZipSerializer(config, output_file)
 
     # init the constellation
-    constellation = celestial.satgen_connstellation.SatgenConstellation(
+    constellation = celestial.satgen_constellation.SatgenConstellation(
         config, serializer
     )
 

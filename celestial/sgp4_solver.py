@@ -150,7 +150,7 @@ class SGP4Solver:
                     # mo=
                     np.radians(
                         (node) * (360.0 / self.nodes_per_plane)
-                        + self.time_offsets[node] / self.period
+                        # + self.time_offsets[node] / self.period
                     ),  # mo: mean anomaly (radians) -> starts at 0 plus offset for the satellites
                     # no_kozai=
                     np.radians(360.0)

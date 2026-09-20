@@ -13,7 +13,7 @@ satgen.py
   → toml.load(input)
   → celestial.config.Config(text_config)
   → celestial.zip_serializer.ZipSerializer(config, output)
-  → celestial.satgen_connstellation.SatgenConstellation(config, serializer)
+  → celestial.satgen_constellation.SatgenConstellation(config, serializer)
   → SatgenConstellation.step(t)
       → Shell.prepare_step(t)
       → AntennaScheduler.select(t, visible_contacts)

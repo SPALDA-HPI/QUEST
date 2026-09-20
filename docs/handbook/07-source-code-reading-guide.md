@@ -1,8 +1,19 @@
 # 7. Source-Code Reading Guide
 
-Read source in data-flow order, not alphabetical order. For every stage below,
-use the same four questions: what directory owns this concern, which files are
+
+
+
+
+## Reading Method
+
+Read source code in data-flow order. For every stage below, we use following four questions: what directory owns this concern, which files are
 the minimum reading set, what enters/leaves them, and what can you now explain?
+
+For each stage, the recommended reading order is as follows:
+
+```text
+directory overview → concrete files → call/data flow → checkpoint
+```
 
 ## Stage 1: configuration contract
 
@@ -24,11 +35,8 @@ merges global and local tables, and constructs `Shell`, `GroundStation`, and
 `MachineConfig` objects. `SatelliteActivation` converts the string policy to
 an enum.
 
-Source fact: backhaul pairing, contact-mode ground-station presence, unique
+Backhaul pairing, contact-mode ground-station presence, unique
 names, and the `antenna_number`/`all` combination are checked here.
-
-Why it matters: add or remove a TOML feature at this boundary first, then
-follow its typed value downstream.
 
 ### Checkpoint
 
@@ -39,15 +47,14 @@ count for both quickstart ground stations.
 
 ### Directory Overview
 
-`satgen.py` is the command entry point. The misspelled historical filename
-`celestial/satgen_connstellation.py` coordinates multiple shells;
+`satgen.py` is the command entry point. `celestial/satgen_constellation.py` coordinates multiple shells;
 `celestial/shell.py` models one shell; `celestial/sgp4_solver.py` propagates
 orbits using Simplified General Perturbations 4 (SGP4).
 
 ### Files to Read
 
 1. `satgen.py`
-2. `celestial/satgen_connstellation.py`
+2. `celestial/satgen_constellation.py`
 3. `celestial/shell.py`
 4. `celestial/sgp4_solver.py`
 
@@ -91,11 +98,8 @@ station, retains still-visible assignments, and fills free antennas by oldest
 waiting time and deterministic IDs. `ground_station_backhaul_links` yields one
 unblocked link for each unordered station pair.
 
-Source fact: backhaul propagation uses a 6,371 km Earth radius, 200,000,000 m/s
+Backhaul propagation uses a 6,371 km Earth radius, 200,000,000 m/s
 fiber propagation speed, and the configured path stretch.
-
-Why it matters: those are controlled model constants, not measured HPI or
-operator-network values.
 
 ### Checkpoint
 
@@ -123,11 +127,10 @@ append changes under a timestep. `persist` packages the validated config,
 initialization CSV, and binary difference files. `ZipDeserializer` exposes the
 inverse `config`, `init_machines`, `diff_machines`, and `diff_links` methods.
 
-Source fact: an initialization record contains nine columns: three identifier
+An initialization record contains nine columns: three identifier
 values and six machine-configuration groups, with boot parameters joined by a
 private separator.
-
-Why it matters: changing `MachineConfig` requires updating writer, reader,
+Changing `MachineConfig` requires updating writer, reader,
 protobuf conversion, Go types, and tests together.
 
 ### Checkpoint
@@ -152,7 +155,7 @@ messages.
 ### Call/Data Flow
 
 The coordinator creates hosts, registers them concurrently, distributes
-machines round-robin, initializes all workers, obtains each timestep's archive
+machines round-robin, initializes all workers and microVMs, obtains each timestep's archive
 differences, converts them to streamed requests, and calls every host's
 `update`. A `finally` block stops the workers.
 
@@ -254,12 +257,3 @@ For the source file you plan to change, identify the nearest existing test,
 the observable behavior a regression would break, and the smallest additional
 test needed before editing production code.
 
-## Final reading summary
-
-```text
-directory overview → concrete files → call/data flow → checkpoint
-```
-
-Do not infer successful KVM execution, physical realism, or measured
-performance from a class name, documentation claim, or passing local unit
-test. Verify each at the boundary it actually exercises.
