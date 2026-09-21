@@ -1,8 +1,6 @@
 # QUEST Quickstart
 
-This tutorial takes you from a clean checkout to one short QUEST emulation.
-It assumes no prior experience with Go, Python virtual environments,
-containers, Firecracker, or Celestial. Read each checkpoint before continuing.
+This tutorial takes you from a clean checkout to one short QUEST emulation. Read each checkpoint before continuing.
 
 ## What You Will Do
 
@@ -11,7 +9,7 @@ You will use two environments:
 - your local workstation uses Docker to build the Linux/amd64 Celestial worker
   and guest root filesystem images, downloads the supplied guest kernel,
   and generates the topology;
-- one HPI Linux virtual machine runs both the Celestial worker and the Python
+- one Linux virtual machine runs both the Celestial worker and the Python
   coordinator in separate terminals, plus the Firecracker microVMs.
 
 The example contains 32 satellites and two ground stations. It demonstrates
@@ -22,12 +20,7 @@ Celestial's information service.
 
 ## Before You Begin
 
-Ask the HPI Scientific Compute Helpdesk for access to the clean Linux virtual
-machine shared by the student cohort. The administrator supplies the sudo
-policy and a working `/dev/kvm` configuration. Do not guess the machine name:
-use only the name the administrator assigns to you.
-
-Coordinate an exclusive experiment time with the other students. Separate
+Separate
 home-directory checkouts are safe, but the worker uses shared host networking,
 TCP port 1969, and `/celestial`, so two Celestial experiments must not run at
 the same time.
@@ -35,7 +28,7 @@ the same time.
 You manage the project-level tools: Git, a POSIX-compatible shell, Go, Python,
 Docker, and the Python virtual environment. The quickstart uses Go through the
 local pinned compile container. Docker belongs on the local workstation only.
-Do not install or run Docker on the remote VM; host Docker networking can
+<u>Do not install or run Docker on the remote VM</u>; host Docker networking can
 interfere with Celestial's Firecracker networking.
 
 The worker is built for Linux on x86-64/amd64. A macOS or Windows computer can
@@ -47,8 +40,7 @@ You need:
 
 - local: Git, a POSIX shell, Python 3.11, `make`, `ssh`, `scp`, and Docker;
 - remote: Linux/amd64, Git, a POSIX shell, Python 3.11, Go 1.22.1, `make`,
-  Firecracker, WireGuard tools, `ip`, `iptables`, `tc`, and KVM access;
-- GitHub access to `hzhang4433/QUEST` while the repository is private.
+  Firecracker, WireGuard tools, `ip`, `iptables`, `tc`, and KVM access
 
 ## Local and Remote Commands
 
@@ -65,11 +57,10 @@ In a `[LOCAL]` shell, define the remote name exactly once:
 REMOTE_HOST="<your assigned host>"
 ```
 
-Replace the angle-bracket text with the hostname supplied to you. Do not copy
-an example hostname from another student. The variable exists only in that
+Replace the angle-bracket text with the hostname supplied to you. The variable exists only in that
 terminal; define it again after opening a new terminal.
 
-Shell reminders:
+Common shell reminders:
 
 - `cd PATH` changes the current directory.
 - `pwd` prints the current directory.
@@ -96,7 +87,7 @@ quickstart/
     └── validator.sh          starts validator.py inside the ground station
 ```
 
-The following files are generated and intentionally ignored by Git:
+The following files are generated during experiment and intentionally ignored by Git:
 
 - `quickstart/quickstart.zip`: serialized topology and timed state changes;
 - `quickstart/validator/server.img`: satellite root filesystem;
@@ -112,7 +103,7 @@ GitHub method configured for your account.
 **[LOCAL]**
 
 ```sh
-git clone git@github.com:hzhang4433/QUEST.git
+git clone git@github.com:SPALDA-HPI/QUEST.git
 cd QUEST
 pwd
 ```
@@ -131,7 +122,7 @@ ssh "$REMOTE_HOST"
 **[REMOTE]**
 
 ```sh
-git clone git@github.com:hzhang4433/QUEST.git
+git clone git@github.com:SPALDA-HPI/QUEST.git
 cd QUEST
 git rev-parse HEAD
 ```
@@ -178,7 +169,7 @@ Checkpoint: the path contains `QUEST/.venv/`.
 
 ## 3. Prepare the Remote VM
 
-First inspect the operating system; do not assume a distribution.
+First inspect the operating system.
 
 **[REMOTE]**
 
@@ -188,8 +179,7 @@ uname -m
 ```
 
 The architecture must be `x86_64` or `amd64`. On Debian or Ubuntu, the
-following installs the basic project and networking commands if the Helpdesk's
-sudo policy permits it:
+following installs the basic project and networking commands: 
 
 **[REMOTE]**
 
@@ -198,16 +188,12 @@ sudo apt-get update
 sudo apt-get install -y git make python3 python3-venv curl tar wireguard-tools iproute2 iptables
 ```
 
-For another distribution, ask the administrator for equivalent package names.
-Do not paste Debian commands into an unrelated system. The unversioned
+The unversioned
 `python3` package is not necessarily Python 3.11. Check
-`command -v python3.11` after installing the baseline packages; if it is
-missing, install Python 3.11 and its venv package from the distribution's
-supported package source or use an administrator-approved user-level
-installation. Do not replace the operating system's Python.
+`command -v python3.11` after installing the baseline packages; if it is missing, install Python 3.11 and its venv package from the distribution's
+supported package source 
 
-The original Celestial workflow uses Firecracker 1.6.0. If the administrator
-has not already installed it, place it in your user path:
+The original Celestial workflow uses Firecracker 1.6.0 and place it in your user path:
 
 **[REMOTE]**
 
@@ -222,25 +208,6 @@ install -m 0755 \
 export PATH="$HOME/.local/go/bin:$HOME/.local/bin:$PATH"
 firecracker --version
 ```
-
-The shared research environment may also require the project Go toolchain for
-later development, although the quickstart worker below is built locally in
-Docker. Install Go 1.22.1 in your home directory when `go version` is missing
-or older:
-
-**[REMOTE]**
-
-```sh
-GO_VERSION="1.22.1"
-curl -fLO "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz"
-mkdir -p "$HOME/.local"
-tar -C "$HOME/.local" -xzf "go${GO_VERSION}.linux-amd64.tar.gz"
-export PATH="$HOME/.local/go/bin:$HOME/.local/bin:$PATH"
-go version
-```
-
-Use the same `PATH` export in each new remote shell, or add it to the startup
-file for the shell you actually use.
 
 Create the remote Python environment used by the coordinator:
 
@@ -258,8 +225,8 @@ Checkpoint: Python reports version 3.11 and its executable is inside the
 remote `QUEST/.venv` checkout.
 
 The original Celestial Quick Start raises the per-user open-file and process
-limits to 64,000 before running many microVMs. On the shared HPI VM, inspect
-the limits without changing them:
+limits to 64,000 before running many microVMs. Inspect
+the limits of the assigned machine without changing them:
 
 **[REMOTE]**
 
@@ -268,9 +235,7 @@ ulimit -n
 ulimit -u
 ```
 
-If either value is below 64000 (or is not `unlimited`), give the output to the
-HPI Scientific Compute Helpdesk. Limit policy is part of the managed host
-setup; students should not overwrite `/etc/security/limits.conf`.
+The value shouldn't below 64000 (or is not `unlimited`).
 
 Do not install Docker here. Do not change KVM ownership, kernel modules,
 network interfaces, or sudo configuration yourself; report those host-level
@@ -289,10 +254,7 @@ cd QUEST
 ```
 
 Every line should begin with `OK:` or `INFO:`. An `ERROR:` line is a stop
-condition. In particular, contact the Helpdesk if `/dev/kvm` is missing or not
-readable/writable. If Docker is detected, do not uninstall it or repair the
-network: ask for a clean Celestial host.
-
+condition.
 ## 5. Build Guest Images Locally
 
 The images are small Linux filesystems used *inside* Firecracker microVMs.
