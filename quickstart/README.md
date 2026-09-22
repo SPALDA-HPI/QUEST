@@ -224,7 +224,7 @@ python3 --version
 Checkpoint: Python reports version 3.11 and its executable is inside the
 remote `QUEST/.venv` checkout.
 
-The original Celestial Quick Start raises the per-user open-file and process
+The original Celestial raises the per-user open-file and process
 limits to 64,000 before running many microVMs. Inspect
 the limits of the assigned machine without changing them:
 
@@ -235,7 +235,7 @@ ulimit -n
 ulimit -u
 ```
 
-The value shouldn't below 64000 (or is not `unlimited`).
+The value shouldn't be less than 64000.
 
 Do not install Docker here. Do not change KVM ownership, kernel modules,
 network interfaces, or sudo configuration yourself; report those host-level
@@ -259,6 +259,22 @@ condition.
 
 The images are small Linux filesystems used *inside* Firecracker microVMs.
 Docker only constructs them; Docker is not the experiment runtime.
+
+
+
+
+
+
+
+Pre-check for Docker:
+
+**[LOCAL]**
+
+```sh
+docker version
+docker buildx ls
+docker run --rm --platform linux/amd64 debian:bookworm uname -m ## the output should be x86_64
+```
 
 Build the existing image-builder container:
 
@@ -310,7 +326,7 @@ test -s quickstart/validator/server.img
 
 ## 6. Download the Guest Kernel Locally
 
-The original Celestial Quick Start supplies a Linux 5.12 kernel matching
+Celestial supplies a Linux 5.12 kernel matching
 `kernel/config-5.12`. Download that file instead of compiling the beginner
 quickstart kernel:
 
@@ -326,14 +342,12 @@ cd ..
 ```
 
 `-f` turns an HTTP error into a failed command, `-L` follows the download
-redirect, and `--retry 3` retries transient failures. If it still reports an
-HTTP error such as 503, stop and ask the supervisor for the verified 5.12
-file. Do not substitute a different kernel. This kernel is for the guest
+redirect, and `--retry 3` retries transient failures. Do not substitute a different kernel. This kernel is for the guest
 microVM, not for your workstation or the remote host operating system.
 
 ## 7. Build the Worker Locally
 
-The original Celestial Quick Start uses the `celestial-make` Docker wrapper.
+Celestial uses the `celestial-make` Docker wrapper.
 It builds the pinned compile image and runs the requested Make target inside a
 Linux/amd64 container.
 
@@ -388,8 +402,8 @@ The TOML file is human-readable input. `satgen.py` calculates positions,
 contacts, routes, VM states, and link properties, then stores timed differences
 in a ZIP archive.
 
-The original Celestial Quick Start uses a native Python virtual environment
-for this step. QUEST also generates the archive locally, using a local virtual
+Celestial uses a native Python virtual environment
+for this step. But we can also generates the archive locally, using a local virtual
 environment created from the same `requirements.txt` as the separate remote
 coordinator environment.
 
@@ -419,9 +433,7 @@ docker run --rm \
     /app/quickstart/quickstart.zip
 ```
 
-Use either generation command, not both. Both write the same kind of topology
-archive; `satgen-docker` is supported by upstream Celestial but is not the
-command used by its original Quick Start.
+Use either generation command, not both. Both write the same kind of topology archive.
 
 Copy the completed archive to the matching remote checkout:
 
@@ -451,19 +463,16 @@ Checkpoint: the worker prints `Celestial started!` and listens on TCP port
 
 ## 11. Start the Coordinator
 
-Open remote terminal 2. The coordinator and worker run on the same HPI VM, so
+Open remote terminal 2. The coordinator and worker run on the same VM, so
 the coordinator connects to the worker through the loopback address
-`127.0.0.1`. This is a deliberate QUEST deployment choice for the shared
-remote environment. The original Celestial Quick Start places its coordinator
-on the coordinating machine; QUEST intentionally keeps this Python process on
-the remote VM.
+`127.0.0.1`.
 
 **[REMOTE, terminal 2]**
 
 ```sh
 cd QUEST
 . .venv/bin/activate
-python3 celestial.py quickstart/quickstart.zip 127.0.0.1
+python3 celestial.py quickstart/quickstart.zip 127.0.0.1:1969
 ```
 
 The coordinator registers the worker, initializes all machines, and applies a
@@ -588,8 +597,7 @@ administrator for a clean host because Docker-created bridges and firewall
 rules can conflict with Celestial networking.
 
 **`/dev/kvm` is missing or inaccessible.** This is an administrator-provided
-virtualization prerequisite. Send the exact preflight error to the Helpdesk;
-do not change device permissions or load kernel modules yourself.
+virtualization prerequisite. Do not change device permissions or load kernel modules yourself.
 
 **The worker rejects the network interface.** Re-run `ip route show default`
 and use the interface from its first default route. Do not assume `ens4`,

@@ -43,7 +43,7 @@ docker run --rm \
 No `/base.sh` is needed because the base image already contains the shell and
 network tools used by `server.sh`.
 
-## Validator/Ground station example
+## Validator ground-station example
 
 The validator needs Python, `requests`, `ping3`, and its Python source:
 
