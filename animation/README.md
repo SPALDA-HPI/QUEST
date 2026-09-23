@@ -1,24 +1,32 @@
 # Animation Only
 
-If you would like to animate a satellite constellation, use the `animate.py`
-program in the root of the repository:
+Start with the [handbook animation guide](../docs/handbook/12-animation.md).
+It explains local Python/VTK setup, a small example, the display legend,
+timing, shutdown, and the differences between animation and full emulation.
+
+With the local Python environment and animation dependencies installed, run
+from the QUEST repository root:
 
 ```sh
-python3 animate.py ./path/to/configuration.toml
+python3 animate.py quickstart/quickstart.toml
 ```
 
 ![Constellation Animation](../docs/assets/celestial-constellation.gif)
 
-In the [`animation`](./animation) directory, you can find multiple example
-configuration files.
+The image above is an inherited illustration, not output from the current
+quickstart. The viewer is a geometry preview: it does not apply QUEST's shared
+antenna scheduler, visualize contact-based VM activation, or draw direct
+ground-station backhaul.
 
-`starlink.toml` has all parameters for the complete Starlink constellation, so
-use that to animate that constellation:
+This directory contains inherited example configurations: `iridium.toml`,
+`kuiper.toml`, `oneweb.toml`, `starlink.toml`, and `geostationary.toml`. They are
+model examples, not verified current operational constellations. Check their
+size and duration before running a larger example:
 
 ```sh
-# in /celestial root directory
+# in root directory
 python3 animate.py ./animation/starlink.toml
 ```
 
-`geostationary.toml` has a single geostationary satellite in orbit
-around earth.
+Stop with `Ctrl+C` in the launching terminal. Closing the window alone may
+leave the animation process running.

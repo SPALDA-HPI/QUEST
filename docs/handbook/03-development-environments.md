@@ -94,6 +94,12 @@ SciPy for `celestial/fw_test.py`, Requests for inspecting validator scripts,
 and type stubs matching pandas 2.1 and protobuf 4.24. It does not replace the packages
 installed inside guest images. Keep `mypy==1.9.0` as pinned in the core list.
 
+## Optional local animation
+
+For an optional local graphical preview, follow the
+[animation guide](12-animation.md). It uses the Python environment plus VTK;
+no worker, guest images, Docker, or remote VM is needed for animation itself.
+
 ## Go toolchain
 
 `go.mod` declares the module and `toolchain go1.22.1`. The normal workflow

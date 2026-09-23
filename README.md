@@ -92,6 +92,7 @@ The handbook is deliberately progressive:
 9. [Testing and debugging](docs/handbook/09-testing-and-debugging.md)
 10. [Running experiments](docs/handbook/10-running-experiments.md)
 11. [Glossary](docs/handbook/11-glossary.md)
+12. [Visualizing a constellation (optional)](docs/handbook/12-animation.md)
 
 ## Documentation
 

@@ -3,7 +3,7 @@
 ## Handbook
 
 The [`handbook`](handbook/01-project-overview.md) teaches the project from first
-principles, then follows its source and runtime call flow. New students should
+principles, then follows its source and runtime call flow. Beginners should
 read the numbered chapters in order.
 
 ## Technical Reference
