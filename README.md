@@ -93,6 +93,7 @@ The handbook is deliberately progressive:
 10. [Running experiments](docs/handbook/10-running-experiments.md)
 11. [Glossary](docs/handbook/11-glossary.md)
 12. [Visualizing a constellation (optional)](docs/handbook/12-animation.md)
+13. [Guide for Local Observation Mapping](docs/handbook/13-guide-for-local-observation-mapping.md)
 
 ## Documentation
 
